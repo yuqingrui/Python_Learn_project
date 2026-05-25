@@ -2,10 +2,12 @@
 import os
 from openai import OpenAI
 
+# 创建与AI大模型交互的客户端对象(DEEPSEEK_API_KEY环境变量的名字,值就是DeepSeel的AAAP_KEY)
 client = OpenAI(
     api_key=os.environ.get('DEEPSEEK_API_KEY'),
     base_url="https://api.deepseek.com")
 
+# 与AI大模型进行交互(参数)
 response = client.chat.completions.create(
     model="deepseek-chat",
     messages=[
@@ -15,4 +17,5 @@ response = client.chat.completions.create(
     stream=False
 )
 
+# 输出大模型返回的结果
 print(response.choices[0].message.content)

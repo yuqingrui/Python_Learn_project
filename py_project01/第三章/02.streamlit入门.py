@@ -1,5 +1,16 @@
 import streamlit as st
 
+# 设置页面的配置项
+st.set_page_config(
+    page_title="Streamlit入门",
+    page_icon="🧊",
+    # 布局
+    layout="wide",
+    # 控制的是侧边栏的状态
+    initial_sidebar_state="expanded",
+    menu_items={}
+)
+
 # 大标题
 st.title("Streamlit 入门表演")
 st.header("Streamlit 一级标题")
