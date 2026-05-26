@@ -46,12 +46,6 @@ if prompt: # 字符串会自动转换为布尔值,如果字符串为空,则为Tr
     # 保存用户输入的提示词
     st.session_state.messages.append({"role":"user","content":prompt})
 
-    print([
-            {"role": "system", "content": system_prompt},
-            # {"role": "user", "content": prompt}
-            # 采用解包
-            *st.session_state.messages
-        ])
     # 调用AI大模型
     response = client.chat.completions.create(
         model="deepseek-chat",
