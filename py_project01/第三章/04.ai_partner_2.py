@@ -55,13 +55,24 @@ if prompt: # 字符串会自动转换为布尔值,如果字符串为空,则为Tr
             # 采用解包
             *st.session_state.messages
         ],
-        stream=False
+        stream=True
     )
 
-    # 输出大模型返回的结果
-    print("--------->调用大模型,提示词:",response.choices[0].message.content)
-    st.chat_message("assistant").write(response.choices[0].message.content)
+    # 输出大模型返回的结果(非流式输出的解析方式)
+    # print("--------->调用大模型,提示词:",response.choices[0].message.content)
+    # st.chat_message("assistant").write(response.choices[0].message.content)
+
+    # 输出大模型返回的结果(流式输出的解析方式)
+    response_message = st.empty() # 创建一个空的组件，用于展示大模型返回的结果
+
+    full_response = ""
+    for chunk in response:
+        if chunk.choices[0].delta.content is not None:
+                content = chunk.choices[0].delta.content
+                full_response += content
+                response_message.chat_message("assistant").write(full_response)
+
 
     #保存大模型返回的结果
-    st.session_state.messages.append({"role":"user","content":response.choices[0].message.content})
+    st.session_state.messages.append({"role":"assistant","content":full_response})
 
