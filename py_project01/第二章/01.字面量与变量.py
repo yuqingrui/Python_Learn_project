@@ -25,14 +25,14 @@ print(num)
 num = True
 print(num)
 
-# 案例
+# csv_data
 
 base = 20.7 # 基础播放量
 incr = 50 # 每一个月的新增播放量
 print("未来第一个月的播放总量: ", base + incr)
 print("未来第二个月的播放总量: ", base + incr + incr)
 
-# 案例 - 升级：一次性可以定义多个变量
+# csv_data - 升级：一次性可以定义多个变量
 base, incr = 20.7, 50
 print("未来第一个月的播放总量: ", base + incr)
 print("未来第二个月的播放总量: ", base + incr + incr)

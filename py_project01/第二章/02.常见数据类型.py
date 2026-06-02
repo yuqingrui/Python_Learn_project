@@ -40,7 +40,7 @@ msg1 = "人生苦短"
 msg2 = "我用Python"
 print("龟叔说：" + msg1 + "，" + msg2)
 
-# 案例：---> str(int数字) ---> 将int类型的数字转为字符串
+# csv_data：---> str(int数字) ---> 将int类型的数字转为字符串
 name = "涛哥"
 age = 18
 pro = "软件工程"
