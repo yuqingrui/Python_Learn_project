@@ -21,27 +21,30 @@ def main():
             print(response)
         else:
             response = requests.post(TMDB_TOP_URL_2,
-                                     data=f"air_date.gte=&air_date.lte=&certification=&certification_country=CN&debug=&first_air_date.gte=&first_air_date.lte=&page={page_num}&sort_by=popularity.desc&with_genres=&with_keywords=&with_networks=&with_origin_country=&with_original_language=&with_release_type=&with_runtime.gte=&with_runtime.lte=",
+                                     data=f"air_date.gte=&air_date.lte=&certification=&certification_country=CN&debug=&first_air_date.gte=&first_air_date.lte=&include_adult=false&include_softcore=false&latest_ceremony.gte=&latest_ceremony.lte=&page={page_num}&primary_release_date.gte=&primary_release_date.lte=&region=&release_date.gte=&release_date.lte=2026-12-15&show_me=everything&sort_by=vote_average.desc&vote_average.gte=0&vote_average.lte=10&vote_count.gte=300&watch_region=CN&with_genres=&with_keywords=&with_networks=&with_origin_country=&with_original_language=&with_watch_monetization_types=&with_watch_providers=&with_release_type=&with_runtime.gte=0&with_runtime.lte=400",
                                      timeout=60)
 
         print(f"发送请求,获取TMDB电影榜单数据 (第{page_num}页)...")
 
         # 2.解析数据,获取电影列表
         document = html.fromstring(response.text)
-        movie_list = document.xpath(f"//*[@id='page_{page_num}']/div[@class='card style_1']")
+        movie_list = document.xpath(f"//div[@id='page_{page_num}']//div[@class='media-list-results contents']/div")
 
         # 3.遍历电影列表,获取电影详情
         for movie in movie_list:
-            movie_urls = movie.xpath("./div/div/a/@href")
+            # 方法1: 直接通过 class 匹配 a 标签
+            movie_urls = movie.xpath(".//a[@class='flex w-full']/@href")
             if movie_urls:
                 # 电影详情的url
                 movie_info_url = TMDB_BASE_URL + movie_urls[0]
                 # 发送请求,获取电影详情数据
                 movie_info = get_movie_info(movie_info_url)
+                print(movie_info)
                 all_movies.append(movie_info)
 
-    # 4.保存数据,保存为 csv 文件
-    save_all_movies(all_movies)
+        # 4.保存数据,保存为 csv 文件
+        print(all_movies)
+        save_all_movies(all_movies)
 
 
 # 获取电影详情
@@ -58,7 +61,7 @@ def get_movie_info(movie_info_url):
     movie_tags = movie_doc.xpath("//*[@id='original_header']/div[2]/section/div[1]/div/span[3]/a/text()")  # 类型
     movie_cost_times = movie_doc.xpath("//*[@id='original_header']/div[2]/section/div[1]/div/span[4]/text()")  # 时长
     movie_scores = movie_doc.xpath("//*[@id='consensus_pill']/div/div[1]/div/div/@data-percent")  # 评分
-    movie_languages = movie_doc.xpath("//*[@id='media_v4']/div/div[2]/div/section/div[1]/div/section[1]/p[3]/text()")  # 语言
+    movie_languages = movie_doc.xpath("//*[@id='media_v4']/div/div/div[2]/div/section/div[1]/div/section[1]/p[3]/text()")  # 语言
     movie_directors = movie_doc.xpath("//*[@id='original_header']/div[2]/section/div[3]/ol/li[1]/p[1]/a/text()")  # 导演
     movie_authors = movie_doc.xpath("//*[@id='original_header']/div[2]/section/div[3]/ol/li[2]/p[1]/a/text()")  # 作者
     movie_slogans = movie_doc.xpath("//*[@id='original_header']/div[2]/section/div[3]/h3[1]/text()")  # 宣传语
